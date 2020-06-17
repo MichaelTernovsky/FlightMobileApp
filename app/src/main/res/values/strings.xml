@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FlightMobileApp</string>
+    <string name="connect">connect</string>
+    <string name="type_url">Type URL</string>
 </resources>
