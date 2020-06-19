@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AppActivity">
+
+    <io.github.controlwear.virtual.joystick.android.JoystickView
+        android:id="@+id/joystick"
+        android:layout_width="250dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="60dp"
+        app:JV_backgroundColor="#009688"
+        app:JV_borderColor="#00796B"
+        app:JV_borderWidth="4dp"
+        app:JV_buttonColor="@android:color/black"
+        app:JV_buttonSizeRatio="20%"
+        app:JV_fixedCenter="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="236dp"
+        android:onClick="logOut"
+        android:text="Log Out"
+        app:layout_constraintBottom_toTopOf="@+id/joystick"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.032" />
+
+    <SeekBar
+        android:id="@+id/rudderSlider"
+        android:layout_width="252dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="8dp"
+        android:max="10"
+        android:min="-10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/joystick"
+        app:layout_constraintStart_toStartOf="@+id/joystick" />
+
+    <SeekBar
+        android:id="@+id/throttleSlider"
+        android:layout_width="249dp"
+        android:layout_height="123dp"
+        android:max="10"
+        android:min="0"
+        android:rotation="270"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/joystick"
+        app:layout_constraintHorizontal_bias="0.396"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/joystick"
+        app:layout_constraintVertical_bias="0.342" />
+
+    <TextView
+        android:id="@+id/throttleText"
+        android:layout_width="82dp"
+        android:layout_height="35dp"
+        android:rotation="270"
+        android:text="0.0"
+        app:layout_constraintBottom_toBottomOf="@+id/throttleSlider"
+        app:layout_constraintEnd_toStartOf="@+id/joystick"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/joystick"
+        app:layout_constraintVertical_bias="0.559" />
+
+    <TextView
+        android:id="@+id/rudderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.0"
+        app:layout_constraintBottom_toBottomOf="@+id/rudderSlider"
+        app:layout_constraintEnd_toEndOf="@+id/rudderSlider"
+        app:layout_constraintStart_toStartOf="@+id/rudderSlider"
+        app:layout_constraintTop_toBottomOf="@+id/joystick"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/aileronText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.0"
+        app:layout_constraintBottom_toTopOf="@+id/joystick"
+        app:layout_constraintEnd_toEndOf="@+id/joystick"
+        app:layout_constraintStart_toStartOf="@+id/joystick" />
+
+    <TextView
+        android:id="@+id/elevatorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="90"
+        android:text="0.0"
+        app:layout_constraintBottom_toBottomOf="@+id/joystick"
+        app:layout_constraintStart_toEndOf="@+id/joystick"
+        app:layout_constraintTop_toTopOf="@+id/joystick"
+        app:layout_constraintVertical_bias="0.519" />
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="360dp"
+        android:layout_height="247dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rudderSlider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.184"
+        tools:srcCompat="@tools:sample/avatars" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

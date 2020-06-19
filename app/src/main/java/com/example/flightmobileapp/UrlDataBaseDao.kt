@@ -15,6 +15,6 @@ interface UrlDataBaseDao {
     @Query("DELETE FROM url_table")
     fun delete()
 
-    @Query("SELECT * FROM url_table WHERE url=:url")
-    fun getByID(url: String): Url?
+    @Query("SELECT * FROM url_table ORDER BY currTime DESC LIMIT 1")
+    fun getFirstUrl(): Url
 }

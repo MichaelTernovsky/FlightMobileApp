@@ -22,7 +22,7 @@ class UrlRepository(application: Application) {
         db.delete()
     }
 
-    fun getByUrl(url: String): Url? {
-        return db.getByID(url)
+    fun getFirstUrl(): Url {
+        return db.getFirstUrl()
     }
 }

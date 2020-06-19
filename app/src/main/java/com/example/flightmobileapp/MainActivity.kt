@@ -1,5 +1,6 @@
 package com.example.flightmobileapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,8 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginBottom
+import androidx.core.view.marginEnd
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         this.urlsList.forEach {
             val button = Button(this)
             button.text = it.url
+            button.transformationMethod = null
             button.layoutParams = ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
@@ -103,24 +107,31 @@ class MainActivity : AppCompatActivity() {
         val curTime = System.currentTimeMillis()
         val newUrl = Url(0, url, curTime)
 
-        // check if the url already exists
-        deleteIfExistInList(newUrl)
+        // check if the user chose url
+        if (url != "") {
+            // check if the url already exists
+            deleteIfExistInList(newUrl)
 
-        // add the new url to the local list
-        urlsList.add(newUrl)
+            // add the new url to the local list
+            urlsList.add(newUrl)
 
-        // delete the current db
-        db.delete()
+            // delete the current db
+            db.delete()
 
-        // update the new db
-        for (it in this.urlsList) {
-            db.insert(it)
+            // update the new db
+            for (it in this.urlsList) {
+                db.insert(it)
+            }
+
+            // delete the buttons
+            //deleteButtons()
+
+            // show the buttons again
+            //showButtons()
+
+            // move to the other window
+            val intent = Intent(this, AppActivity::class.java).apply { }
+            startActivity(intent)
         }
-
-        // delete the buttons
-        deleteButtons()
-
-        // show the buttons again
-        showButtons()
     }
 }
