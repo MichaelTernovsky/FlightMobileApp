@@ -65,7 +65,7 @@ class AppActivity : AppCompatActivity() {
             .setLenient()
             .create()
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5200/")
+            .baseUrl("http://10.0.2.2:5002/")
             .addConverterFactory(GsonConverterFactory.create(json))
             .build()
         val api = retrofit.create(Api::class.java)
@@ -79,11 +79,13 @@ class AppActivity : AppCompatActivity() {
                     override fun onResponse(
                         call: Call<ResponseBody>, response: Response<ResponseBody>
                     ) {
-                        val bytes = response?.body()?.bytes()
-                        val bitmap =
-                            bytes?.size?.let { BitmapFactory.decodeByteArray(bytes, 0, it) }
-                        if (bitmap != null) {
-                            img.setImageBitmap(bitmap)
+                        //val bytes = response?.body()?.bytes()
+                        //val bitmap =
+                        //bytes?.size?.let { BitmapFactory.decodeByteArray(bytes, 0, it) }
+                        val I = response?.body()?.byteStream()
+                        val B = BitmapFactory.decodeStream(I)
+                        if (B != null) {
+                            img.setImageBitmap(B)
                         }
                     }
 
