@@ -52,23 +52,30 @@ class AppActivity : AppCompatActivity() {
         // turning on the on move function of the sliders
         setRudderSliderListeners()
         setThrottleSliderListeners()
+
+        // turning on the screen shot function
+        getScreenShot()
+
+        // turning on the set commands function
+        //setValuesCommand()
     }
 
-    /*
-    private fun getImgLoop() {
-        val gson = GsonBuilder()
+    private fun getScreenShot() {
+        val json = GsonBuilder()
             .setLenient()
             .create()
         val retrofit = Retrofit.Builder()
-            .baseUrl(urlPath)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .baseUrl("http://10.0.2.2:5200/")
+            .addConverterFactory(GsonConverterFactory.create(json))
             .build()
-        val api = retrofit.create(AppActivity::class.java)
-        // Getting the picture
+        val api = retrofit.create(Api::class.java)
+
+        // get the screen shot
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
                 delay(250)
-                val body = api.getScreenshot().enqueue(object : Callback<ResponseBody> {
+                val body = api.getImg().enqueue(object : Callback<ResponseBody> {
+                    // in case of success
                     override fun onResponse(
                         call: Call<ResponseBody>, response: Response<ResponseBody>
                     ) {
@@ -80,17 +87,18 @@ class AppActivity : AppCompatActivity() {
                         }
                     }
 
+                    // in case of failure
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        t.printStackTrace()
                         Toast.makeText(
                             applicationContext,
-                            "Failed to get image", Toast.LENGTH_SHORT
+                            "Failed to get screen shot", Toast.LENGTH_SHORT
                         ).show()
                     }
                 })
             }
         }
     }
-         */
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun logOut(view: View) {
