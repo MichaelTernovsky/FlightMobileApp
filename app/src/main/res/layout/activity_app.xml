@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".AppActivity">
 
+
     <io.github.controlwear.virtual.joystick.android.JoystickView
         android:id="@+id/joystick"
         android:layout_width="250dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="44dp"
         app:JV_backgroundColor="#009688"
         app:JV_borderColor="#00796B"
         app:JV_borderWidth="4dp"
@@ -21,7 +22,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <SeekBar
         android:id="@+id/rudderSlider"
@@ -36,38 +36,39 @@
 
     <SeekBar
         android:id="@+id/throttleSlider"
-        android:layout_width="249dp"
-        android:layout_height="123dp"
+        android:layout_width="229dp"
+        android:layout_height="126dp"
         android:max="10"
         android:min="0"
         android:rotation="270"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/joystick"
-        app:layout_constraintHorizontal_bias="0.396"
+        app:layout_constraintHorizontal_bias="0.422"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/joystick"
-        app:layout_constraintVertical_bias="0.342" />
+        app:layout_constraintVertical_bias="0.416" />
 
     <TextView
         android:id="@+id/throttleText"
-        android:layout_width="82dp"
-        android:layout_height="35dp"
+        android:layout_width="86dp"
+        android:layout_height="48dp"
         android:rotation="270"
-        android:text="0.0"
+        android:text="throttle: 0.0"
         app:layout_constraintBottom_toBottomOf="@+id/throttleSlider"
         app:layout_constraintEnd_toStartOf="@+id/joystick"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/joystick"
-        app:layout_constraintVertical_bias="0.559" />
+        app:layout_constraintVertical_bias="0.654" />
 
     <TextView
         android:id="@+id/rudderText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.0"
+        android:layout_width="79dp"
+        android:layout_height="21dp"
+        android:text="rudder: 0.0"
         app:layout_constraintBottom_toBottomOf="@+id/rudderSlider"
         app:layout_constraintEnd_toEndOf="@+id/rudderSlider"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="@+id/rudderSlider"
         app:layout_constraintTop_toBottomOf="@+id/joystick"
         app:layout_constraintVertical_bias="1.0" />
@@ -76,19 +77,24 @@
         android:id="@+id/aileronText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0.0"
-        app:layout_constraintBottom_toTopOf="@+id/joystick"
+        android:text="aileron: 0.0"
+        app:layout_constraintBottom_toTopOf="@+id/rudderText"
         app:layout_constraintEnd_toEndOf="@+id/joystick"
-        app:layout_constraintStart_toStartOf="@+id/joystick" />
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="@+id/joystick"
+        app:layout_constraintTop_toTopOf="@+id/img"
+        app:layout_constraintVertical_bias="0.513" />
 
     <TextView
         android:id="@+id/elevatorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rotation="90"
-        android:text="0.0"
+        android:text="elevator: 0.0"
         app:layout_constraintBottom_toBottomOf="@+id/joystick"
-        app:layout_constraintStart_toEndOf="@+id/joystick"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.937"
+        app:layout_constraintStart_toStartOf="@+id/joystick"
         app:layout_constraintTop_toTopOf="@+id/joystick"
         app:layout_constraintVertical_bias="0.519" />
 
@@ -98,16 +104,16 @@
         android:layout_height="247dp"
         app:layout_constraintBottom_toBottomOf="@+id/rudderSlider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.686"
+        app:layout_constraintHorizontal_bias="0.941"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.075"
+        app:layout_constraintVertical_bias="0.063"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/logoutBtn"
-        android:layout_width="91dp"
-        android:layout_height="41dp"
+        android:layout_width="65dp"
+        android:layout_height="25dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/holo_red_light"
         android:onClick="logOut"
@@ -115,10 +121,10 @@
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/img"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.99"
+        app:layout_constraintHorizontal_bias="0.991"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.428" />
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

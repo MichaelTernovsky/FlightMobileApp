@@ -67,7 +67,7 @@ class AppActivity : AppCompatActivity() {
             .setLenient()
             .create()
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5002")
+            .baseUrl(urlPath)
             .addConverterFactory(GsonConverterFactory.create(json))
             .build()
         val api = retrofit.create(Api::class.java)
@@ -108,7 +108,7 @@ class AppActivity : AppCompatActivity() {
         val rb = RequestBody.create(MediaType.parse("application/json"), json)
         val gson = GsonBuilder().setLenient().create()
         val retrofit = Retrofit.Builder()
-            .baseUrl(("http://10.0.2.2:5002"))
+            .baseUrl(urlPath)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         val api = retrofit.create(Api::class.java)
@@ -158,8 +158,8 @@ class AppActivity : AppCompatActivity() {
             val roundedY = y.roundToInt() / 100.0
 
             // update the text views
-            this.aileronText.text = roundedX.toString()
-            this.elevatorText.text = roundedY.toString()
+            this.aileronText.text = "aileron: $roundedX"
+            this.elevatorText.text = "elevator: $roundedY"
 
             // check if the values change in more than 1%
             if (changedEnough(roundedX, aileron) || changedEnough(roundedY, elevator)) {
@@ -182,7 +182,7 @@ class AppActivity : AppCompatActivity() {
                     // Display the current progress of SeekBar
                     rudder = value
                     rudderSlider.progress = (value * 10).toInt()
-                    rudderText.text = value.toString()
+                    rudderText.text = "rudder: $value"
 
                     // turning on the set commands function
                     setValuesCommand()
@@ -202,7 +202,7 @@ class AppActivity : AppCompatActivity() {
                     // Display the current progress of SeekBar
                     throttle = value
                     throttleSlider.progress = (value * 10).toInt()
-                    throttleText.text = value.toString()
+                    throttleText.text = "throttle: $value"
 
                     // turning on the set commands function
                     setValuesCommand()
