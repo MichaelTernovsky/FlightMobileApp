@@ -60,7 +60,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/joystick"
-        app:layout_constraintVertical_bias="0.709" />
+        app:layout_constraintVertical_bias="0.621" />
 
     <TextView
         android:id="@+id/rudderText"
@@ -76,28 +76,28 @@
 
     <TextView
         android:id="@+id/aileronText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="87dp"
+        android:layout_height="40dp"
         android:text="aileron: 0.0"
         app:layout_constraintBottom_toTopOf="@+id/rudderText"
         app:layout_constraintEnd_toEndOf="@+id/joystick"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="@+id/joystick"
         app:layout_constraintTop_toTopOf="@+id/img"
-        app:layout_constraintVertical_bias="0.513" />
+        app:layout_constraintVertical_bias="0.548" />
 
     <TextView
         android:id="@+id/elevatorText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="87dp"
+        android:layout_height="41dp"
         android:rotation="90"
         android:text="elevator: 0.0"
         app:layout_constraintBottom_toBottomOf="@+id/joystick"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
+        app:layout_constraintHorizontal_bias="0.934"
         app:layout_constraintStart_toStartOf="@+id/joystick"
         app:layout_constraintTop_toTopOf="@+id/joystick"
-        app:layout_constraintVertical_bias="0.519" />
+        app:layout_constraintVertical_bias="0.583" />
 
     <ImageView
         android:id="@+id/img"

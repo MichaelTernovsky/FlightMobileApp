@@ -101,7 +101,6 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setValuesCommand() {
         val json =
             "{\"aileron\": $aileron,\n \"rudder\": $rudder,\n \"elevator\": $elevator,\n \"throttle\": $throttle\n}"
@@ -113,20 +112,23 @@ class AppActivity : AppCompatActivity() {
             .build()
         val api = retrofit.create(Api::class.java)
         val body = api.postCommand(rb).enqueue(object : Callback<ResponseBody> {
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-            }
-
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
                     Log.d("FlightMobileApp", response.body().toString())
                     println("make the update correctly")
                 } catch (e: IOException) {
-                    e.printStackTrace()
                     Toast.makeText(
                         applicationContext,
                         "Failed to set values", Toast.LENGTH_SHORT
                     ).show()
                 }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(
+                    applicationContext,
+                    "Failed to set values", Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
@@ -143,8 +145,9 @@ class AppActivity : AppCompatActivity() {
         return if (originalVal == 0.0 && changedVal != 0.0)
             true
         else {
-            val newVal = originalVal * 1.01
-            newVal >= changedVal
+            val absValue =
+                kotlin.math.abs(kotlin.math.abs(changedVal) - kotlin.math.abs(originalVal))
+            return absValue >= 0.01 * kotlin.math.abs(originalVal)
         }
     }
 
@@ -161,11 +164,11 @@ class AppActivity : AppCompatActivity() {
             this.aileronText.text = "aileron: $roundedX"
             this.elevatorText.text = "elevator: $roundedY"
 
+            aileron = roundedX
+            elevator = roundedY
+
             // check if the values change in more than 1%
             if (changedEnough(roundedX, aileron) || changedEnough(roundedY, elevator)) {
-                aileron = roundedX
-                elevator = roundedY
-
                 // turning on the set commands function
                 setValuesCommand()
             }
@@ -177,16 +180,17 @@ class AppActivity : AppCompatActivity() {
         rudderSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 val value = i / 10.toDouble()
-                // check if the values change in more than 1%
-                //if (changedEnough(value, aileron)) {
+
                 // Display the current progress of SeekBar
                 rudder = value
                 rudderSlider.progress = (value * 10).toInt()
                 rudderText.text = "rudder: $value"
 
-                // turning on the set commands function
-                setValuesCommand()
-                //}
+                // check if the values changed in more than 1%
+                if (changedEnough(value, aileron)) {
+                    // turning on the set commands function
+                    setValuesCommand()
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -198,15 +202,17 @@ class AppActivity : AppCompatActivity() {
         throttleSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 val value = i / 10.toDouble()
-                //if (changedEnough(value, aileron)) {
+
                 // Display the current progress of SeekBar
                 throttle = value
                 throttleSlider.progress = (value * 10).toInt()
                 throttleText.text = "throttle: $value"
 
-                // turning on the set commands function
-                setValuesCommand()
-                // }
+                // check if the values changed in more than 1%
+                if (changedEnough(value, aileron)) {
+                    // turning on the set commands function
+                    setValuesCommand()
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
