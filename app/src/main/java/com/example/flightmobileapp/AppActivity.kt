@@ -178,15 +178,15 @@ class AppActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 val value = i / 10.toDouble()
                 // check if the values change in more than 1%
-                if (changedEnough(value, aileron)) {
-                    // Display the current progress of SeekBar
-                    rudder = value
-                    rudderSlider.progress = (value * 10).toInt()
-                    rudderText.text = "rudder: $value"
+                //if (changedEnough(value, aileron)) {
+                // Display the current progress of SeekBar
+                rudder = value
+                rudderSlider.progress = (value * 10).toInt()
+                rudderText.text = "rudder: $value"
 
-                    // turning on the set commands function
-                    setValuesCommand()
-                }
+                // turning on the set commands function
+                setValuesCommand()
+                //}
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -198,15 +198,15 @@ class AppActivity : AppCompatActivity() {
         throttleSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 val value = i / 10.toDouble()
-                if (changedEnough(value, aileron)) {
-                    // Display the current progress of SeekBar
-                    throttle = value
-                    throttleSlider.progress = (value * 10).toInt()
-                    throttleText.text = "throttle: $value"
+                //if (changedEnough(value, aileron)) {
+                // Display the current progress of SeekBar
+                throttle = value
+                throttleSlider.progress = (value * 10).toInt()
+                throttleText.text = "throttle: $value"
 
-                    // turning on the set commands function
-                    setValuesCommand()
-                }
+                // turning on the set commands function
+                setValuesCommand()
+                // }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}

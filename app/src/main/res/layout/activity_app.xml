@@ -27,11 +27,12 @@
         android:id="@+id/rudderSlider"
         android:layout_width="252dp"
         android:layout_height="53dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:max="10"
         android:min="-10"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/joystick"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/joystick" />
 
     <SeekBar
@@ -59,7 +60,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/joystick"
-        app:layout_constraintVertical_bias="0.654" />
+        app:layout_constraintVertical_bias="0.709" />
 
     <TextView
         android:id="@+id/rudderText"
@@ -104,27 +105,26 @@
         android:layout_height="247dp"
         app:layout_constraintBottom_toBottomOf="@+id/rudderSlider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.941"
+        app:layout_constraintHorizontal_bias="0.686"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.063"
+        app:layout_constraintVertical_bias="0.085"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/logoutBtn"
         android:layout_width="65dp"
         android:layout_height="25dp"
-        android:layout_marginTop="16dp"
         android:background="@android:color/holo_red_light"
         android:onClick="logOut"
         android:text="log out"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/img"
+        app:layout_constraintBottom_toBottomOf="@+id/img"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.991"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
