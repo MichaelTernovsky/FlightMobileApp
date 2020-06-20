@@ -22,20 +22,6 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/logoutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="236dp"
-        android:onClick="logOut"
-        android:text="Log Out"
-        app:layout_constraintBottom_toTopOf="@+id/joystick"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.032" />
 
     <SeekBar
         android:id="@+id/rudderSlider"
@@ -112,11 +98,27 @@
         android:layout_height="247dp"
         app:layout_constraintBottom_toBottomOf="@+id/rudderSlider"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.686"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.184"
+        app:layout_constraintVertical_bias="0.075"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="91dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/holo_red_light"
+        android:onClick="logOut"
+        android:text="log out"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.99"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.428" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

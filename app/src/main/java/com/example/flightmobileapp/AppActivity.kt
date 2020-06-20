@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
@@ -16,12 +17,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import kotlin.math.roundToInt
 
 class AppActivity : AppCompatActivity() {
@@ -55,17 +59,15 @@ class AppActivity : AppCompatActivity() {
 
         // turning on the screen shot function
         getScreenShot()
-
-        // turning on the set commands function
-        //setValuesCommand()
     }
 
     private fun getScreenShot() {
+        //http://10.0.2.2:5002
         val json = GsonBuilder()
             .setLenient()
             .create()
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:5002/")
+            .baseUrl("http://10.0.2.2:5002")
             .addConverterFactory(GsonConverterFactory.create(json))
             .build()
         val api = retrofit.create(Api::class.java)
@@ -79,19 +81,16 @@ class AppActivity : AppCompatActivity() {
                     override fun onResponse(
                         call: Call<ResponseBody>, response: Response<ResponseBody>
                     ) {
-                        //val bytes = response?.body()?.bytes()
-                        //val bitmap =
-                        //bytes?.size?.let { BitmapFactory.decodeByteArray(bytes, 0, it) }
-                        val I = response?.body()?.byteStream()
-                        val B = BitmapFactory.decodeStream(I)
-                        if (B != null) {
-                            img.setImageBitmap(B)
+                        val bytes = response?.body()?.bytes()
+                        val bitmap =
+                            bytes?.size?.let { BitmapFactory.decodeByteArray(bytes, 0, it) }
+                        if (bitmap != null) {
+                            img.setImageBitmap(bitmap)
                         }
                     }
 
                     // in case of failure
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                        t.printStackTrace()
                         Toast.makeText(
                             applicationContext,
                             "Failed to get screen shot", Toast.LENGTH_SHORT
@@ -101,6 +100,37 @@ class AppActivity : AppCompatActivity() {
             }
         }
     }
+
+
+    private fun setValuesCommand() {
+        val json =
+            "{\"aileron\": $aileron,\n \"rudder\": $rudder,\n \"elevator\": $elevator,\n \"throttle\": $throttle\n}"
+        val rb = RequestBody.create(MediaType.parse("application/json"), json)
+        val gson = GsonBuilder().setLenient().create()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(("http://10.0.2.2:5002"))
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+        val api = retrofit.create(Api::class.java)
+        val body = api.postCommand(rb).enqueue(object : Callback<ResponseBody> {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            }
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                try {
+                    Log.d("FlightMobileApp", response.body().toString())
+                    println("make the update correctly")
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    Toast.makeText(
+                        applicationContext,
+                        "Failed to set values", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun logOut(view: View) {
@@ -135,6 +165,9 @@ class AppActivity : AppCompatActivity() {
             if (changedEnough(roundedX, aileron) || changedEnough(roundedY, elevator)) {
                 aileron = roundedX
                 elevator = roundedY
+
+                // turning on the set commands function
+                setValuesCommand()
             }
         })
     }
@@ -148,7 +181,11 @@ class AppActivity : AppCompatActivity() {
                 if (changedEnough(value, aileron)) {
                     // Display the current progress of SeekBar
                     rudder = value
+                    rudderSlider.progress = (value * 10).toInt()
                     rudderText.text = value.toString()
+
+                    // turning on the set commands function
+                    setValuesCommand()
                 }
             }
 
@@ -164,7 +201,11 @@ class AppActivity : AppCompatActivity() {
                 if (changedEnough(value, aileron)) {
                     // Display the current progress of SeekBar
                     throttle = value
+                    throttleSlider.progress = (value * 10).toInt()
                     throttleText.text = value.toString()
+
+                    // turning on the set commands function
+                    setValuesCommand()
                 }
             }
 
