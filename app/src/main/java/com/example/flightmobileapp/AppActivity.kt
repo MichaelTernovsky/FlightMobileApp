@@ -41,6 +41,9 @@ class AppActivity : AppCompatActivity() {
     // the url fields
     private var urlPath = ""
 
+    // assisting variable for the errors messages
+    private var messageShouldStop = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app)
@@ -61,8 +64,14 @@ class AppActivity : AppCompatActivity() {
         getScreenShot()
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // reset the assisting variable
+        messageShouldStop = false
+    }
+
     private fun getScreenShot() {
-        //http://10.0.2.2:5002
         val json = GsonBuilder()
             .setLenient()
             .create()
@@ -75,7 +84,7 @@ class AppActivity : AppCompatActivity() {
         // get the screen shot
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
-                delay(250)
+                delay(300)
                 val body = api.getImg().enqueue(object : Callback<ResponseBody> {
                     // in case of success
                     override fun onResponse(
@@ -91,10 +100,12 @@ class AppActivity : AppCompatActivity() {
 
                     // in case of failure
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                        Toast.makeText(
-                            applicationContext,
-                            "Failed to get screen shot", Toast.LENGTH_SHORT
-                        ).show()
+                        if (!messageShouldStop) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Failed to get screen shot", Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 })
             }
@@ -117,10 +128,12 @@ class AppActivity : AppCompatActivity() {
                     Log.d("FlightMobileApp", response.body().toString())
                     println("make the update correctly")
                 } catch (e: IOException) {
-                    Toast.makeText(
-                        applicationContext,
-                        "Failed to set values", Toast.LENGTH_SHORT
-                    ).show()
+                    if (!messageShouldStop) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Failed to set values", Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
 
@@ -139,9 +152,13 @@ class AppActivity : AppCompatActivity() {
         // move to the main window
         val intent = Intent(this, MainActivity::class.java).apply { }
         startActivity(intent)
+
+        // the message should stop
+        messageShouldStop = true
     }
 
-    private fun changedEnough(changedVal: Double, originalVal: Double): Boolean {
+    private fun moreThanOnePercent(changedVal: Double, originalVal: Double): Boolean {
+        /*
         return if (originalVal == 0.0 && changedVal != 0.0)
             true
         else {
@@ -149,6 +166,15 @@ class AppActivity : AppCompatActivity() {
                 kotlin.math.abs(kotlin.math.abs(changedVal) - kotlin.math.abs(originalVal))
             return absValue >= 0.01 * kotlin.math.abs(originalVal)
         }
+
+         */
+
+        if ((changedVal > originalVal) && (changedVal - originalVal) >= 0.01) {
+            return true
+        } else if ((changedVal < originalVal) && (originalVal - changedVal) >= 0.01) {
+            return true
+        }
+        return false
     }
 
     private fun setJoystickListeners() {
@@ -161,14 +187,16 @@ class AppActivity : AppCompatActivity() {
             val roundedY = y.roundToInt() / 100.0
 
             // update the text views
-            this.aileronText.text = "aileron: $roundedX"
-            this.elevatorText.text = "elevator: $roundedY"
+            val newAileron = "aileron: $roundedX"
+            val newElevator = "elevator: $roundedY"
+            this.aileronText.text = newAileron
+            this.elevatorText.text = newElevator
 
             aileron = roundedX
             elevator = roundedY
 
             // check if the values change in more than 1%
-            if (changedEnough(roundedX, aileron) || changedEnough(roundedY, elevator)) {
+            if (moreThanOnePercent(roundedX, aileron) || moreThanOnePercent(roundedY, elevator)) {
                 // turning on the set commands function
                 setValuesCommand()
             }
@@ -184,10 +212,11 @@ class AppActivity : AppCompatActivity() {
                 // Display the current progress of SeekBar
                 rudder = value
                 rudderSlider.progress = (value * 10).toInt()
-                rudderText.text = "rudder: $value"
+                val newRudder = "rudder: $value"
+                rudderText.text = newRudder
 
                 // check if the values changed in more than 1%
-                if (changedEnough(value, aileron)) {
+                if (moreThanOnePercent(value, aileron)) {
                     // turning on the set commands function
                     setValuesCommand()
                 }
@@ -206,10 +235,11 @@ class AppActivity : AppCompatActivity() {
                 // Display the current progress of SeekBar
                 throttle = value
                 throttleSlider.progress = (value * 10).toInt()
-                throttleText.text = "throttle: $value"
+                val newThrottle = "throttle: $value"
+                throttleText.text = newThrottle
 
                 // check if the values changed in more than 1%
-                if (changedEnough(value, aileron)) {
+                if (moreThanOnePercent(value, aileron)) {
                     // turning on the set commands function
                     setValuesCommand()
                 }

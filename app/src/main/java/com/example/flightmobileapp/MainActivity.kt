@@ -1,6 +1,7 @@
 package com.example.flightmobileapp
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -8,11 +9,24 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.marginBottom
 import androidx.core.view.marginEnd
+import com.google.gson.GsonBuilder
+import kotlinx.android.synthetic.main.activity_app.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     // the data base
@@ -101,6 +115,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun moveToSecondWindow() {
+        // success - move to the next window
+        val intent = Intent(this, AppActivity::class.java).apply { }
+        startActivity(intent)
+    }
+
+    private fun tryToConnect(urlPath: String) {
+        val json = GsonBuilder()
+            .setLenient()
+            .create()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(urlPath)
+            .addConverterFactory(GsonConverterFactory.create(json))
+            .build()
+        val api = retrofit.create(Api::class.java)
+
+        val body = api.getImg().enqueue(object : Callback<ResponseBody> {
+            // in case of success
+            override fun onResponse(
+                call: Call<ResponseBody>, response: Response<ResponseBody>
+            ) {
+                // success - move to the second window
+                moveToSecondWindow()
+            }
+
+            // in case of failure
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                // failure - show correct message
+                Toast.makeText(
+                    applicationContext,
+                    "Failed to connect to the server", Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun addNewUrl(view: View) {
         val url = this.urlTxt.text.toString()
@@ -129,9 +179,8 @@ class MainActivity : AppCompatActivity() {
             // show the buttons again
             //showButtons()
 
-            // move to the other window
-            val intent = Intent(this, AppActivity::class.java).apply { }
-            startActivity(intent)
+            // check if we can connect to the server
+            tryToConnect(url)
         }
     }
 }
