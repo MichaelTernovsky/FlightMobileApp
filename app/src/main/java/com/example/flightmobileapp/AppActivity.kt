@@ -87,6 +87,42 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
+    private fun setValuesCommand() {
+        val json =
+            "{\"aileron\": $aileron,\n \"rudder\": $rudder,\n \"elevator\": $elevator,\n \"throttle\": $throttle\n}"
+        val rb = RequestBody.create(MediaType.parse("application/json"), json)
+        val gson = GsonBuilder().setLenient().create()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(urlPath)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+        val api = retrofit.create(Api::class.java)
+        val body = api.postCommand(rb).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                try {
+                    // try to send the message
+                    Log.d("FlightMobileApp", response.body().toString())
+                } catch (e: IOException) {
+                    val valuesToast = Toast.makeText(
+                        applicationContext,
+                        "Failed to set values", Toast.LENGTH_SHORT
+                    )
+                    valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 430, 20)
+                    valuesToast.show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                val valuesToast = Toast.makeText(
+                    applicationContext,
+                    "Failed to set values", Toast.LENGTH_SHORT
+                )
+                valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 430, 20)
+                valuesToast.show()
+            }
+        })
+    }
+
     private fun getScreenShot() {
         val json = GsonBuilder().setLenient().create()
 
@@ -137,52 +173,6 @@ class AppActivity : AppCompatActivity() {
                 getScreenShot()
             }
         }
-    }
-
-    private fun setValuesCommand() {
-        val json =
-            "{\"aileron\": $aileron,\n \"rudder\": $rudder,\n \"elevator\": $elevator,\n \"throttle\": $throttle\n}"
-        val rb = RequestBody.create(MediaType.parse("application/json"), json)
-        val gson = GsonBuilder().setLenient().create()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(urlPath)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-        val api = retrofit.create(Api::class.java)
-        val body = api.postCommand(rb).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                try {
-                    // try to send the message
-                    Log.d("FlightMobileApp", response.body().toString())
-                } catch (e: IOException) {
-                    val valuesToast = Toast.makeText(
-                        applicationContext,
-                        "Failed to set values", Toast.LENGTH_SHORT
-                    )
-                    valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 430, 20)
-                    valuesToast.show()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                val valuesToast = Toast.makeText(
-                    applicationContext,
-                    "Failed to set values", Toast.LENGTH_SHORT
-                )
-                valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 430, 20)
-                valuesToast.show()
-            }
-        })
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun logOut(view: View) {
-        // move to the main window
-        val intent = Intent(this, MainActivity::class.java).apply { }
-        startActivity(intent)
-
-        // shut down the window
-        onStop()
     }
 
     private fun moreThanOnePercent(changedVal: Double, originalVal: Double): Boolean {
@@ -276,5 +266,15 @@ class AppActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun logOut(view: View) {
+        // move to the main window
+        val intent = Intent(this, MainActivity::class.java).apply { }
+        startActivity(intent)
+
+        // shut down the window
+        onStop()
     }
 }
