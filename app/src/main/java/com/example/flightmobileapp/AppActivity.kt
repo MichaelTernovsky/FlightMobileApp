@@ -93,7 +93,7 @@ class AppActivity : AppCompatActivity() {
         // get the screen shot
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
-                delay(300)
+                delay(1000)
                 val body = api.getImg().enqueue(object : Callback<ResponseBody> {
                     // in case of success
                     override fun onResponse(
@@ -110,12 +110,16 @@ class AppActivity : AppCompatActivity() {
                     // in case of failure
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                         if (!messageShouldStop) {
-                            val toast = Toast.makeText(
+                            val screenShotToast = Toast.makeText(
                                 applicationContext,
                                 "Failed to get screen shot", Toast.LENGTH_SHORT
                             )
-                            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
-                            toast.show()
+                            screenShotToast.setGravity(
+                                Gravity.TOP or Gravity.CENTER_HORIZONTAL,
+                                350,
+                                20
+                            )
+                            screenShotToast.show()
                         }
                     }
                 })
@@ -136,25 +140,25 @@ class AppActivity : AppCompatActivity() {
         val body = api.postCommand(rb).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 try {
+                    // try to send the message
                     Log.d("FlightMobileApp", response.body().toString())
-                    println("make the update correctly")
                 } catch (e: IOException) {
-                    if (!messageShouldStop) {
-                        val toast = Toast.makeText(
-                            applicationContext,
-                            "Failed to set values", Toast.LENGTH_SHORT
-                        )
-                        toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
-                        toast.show()
-                    }
+                    val valuesToast = Toast.makeText(
+                        applicationContext,
+                        "Failed to set values", Toast.LENGTH_SHORT
+                    )
+                    valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                    valuesToast.show()
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(
+                val valuesToast = Toast.makeText(
                     applicationContext,
                     "Failed to set values", Toast.LENGTH_SHORT
-                ).show()
+                )
+                valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                valuesToast.show()
             }
         })
     }
@@ -198,12 +202,18 @@ class AppActivity : AppCompatActivity() {
             this.elevatorText.text = newElevator
 
             // check if the values change in more than 1%
-            if (moreThanOnePercent(roundedX, aileron) || moreThanOnePercent(roundedY, elevator)) {
+            if (moreThanOnePercent(roundedX, aileron) || moreThanOnePercent(
+                    roundedY,
+                    elevator
+                )
+            ) {
                 aileron = roundedX
                 elevator = roundedY
 
                 // turning on the set commands function
-                setValuesCommand()
+                CoroutineScope(Dispatchers.IO).launch {
+                    setValuesCommand()
+                }
             }
         })
     }
@@ -223,7 +233,9 @@ class AppActivity : AppCompatActivity() {
                 // check if the values changed in more than 1%
                 if (moreThanOnePercent(value, aileron)) {
                     // turning on the set commands function
-                    setValuesCommand()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        setValuesCommand()
+                    }
                 }
             }
 
@@ -246,7 +258,9 @@ class AppActivity : AppCompatActivity() {
                 // check if the values changed in more than 1%
                 if (moreThanOnePercent(value, aileron)) {
                     // turning on the set commands function
-                    setValuesCommand()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        setValuesCommand()
+                    }
                 }
             }
 
