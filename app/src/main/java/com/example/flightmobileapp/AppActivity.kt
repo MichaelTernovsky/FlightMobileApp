@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -14,11 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
 import io.github.controlwear.virtual.joystick.android.JoystickView
 import kotlinx.android.synthetic.main.activity_app.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import okhttp3.MediaType
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -42,8 +42,16 @@ class AppActivity : AppCompatActivity() {
     // the url fields
     private var urlPath = ""
 
-    // assisting variable for the errors messages
-    private var messageShouldStop = false
+    // assisting variable to know if the current screen shot changed
+    private var isScreenShotChanged = false
+
+    override fun onStart() {
+        super.onStart()
+
+        if (!isScreenShotChanged) {
+            getScreenShot()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,67 +70,71 @@ class AppActivity : AppCompatActivity() {
         setThrottleSliderListeners()
 
         // turning on the screen shot function
-        getScreenShot()
-
-        // reset the assisting variable
-        messageShouldStop = false
+        getScreenShotLoop()
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        // reset the assisting variable
-        messageShouldStop = false
+    override fun onPause() {
+        super.onPause()
+        if (isScreenShotChanged) {
+            isScreenShotChanged = false
+        }
     }
 
-    override fun onStop() {
-        super.onStop()
-        messageShouldStop = true
+    override fun onResume() {
+        super.onResume()
+        if (!isScreenShotChanged) {
+            getScreenShot()
+        }
     }
 
     private fun getScreenShot() {
-        val json = GsonBuilder()
-            .setLenient()
-            .create()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(urlPath)
-            .addConverterFactory(GsonConverterFactory.create(json))
-            .build()
+        val json = GsonBuilder().setLenient().create()
+
+        val retrofit = Retrofit.Builder().baseUrl(urlPath)
+            .addConverterFactory(GsonConverterFactory.create(json)).build()
+
         val api = retrofit.create(Api::class.java)
 
-        // get the screen shot
-        CoroutineScope(Dispatchers.IO).launch {
-            while (true) {
-                delay(1000)
-                val body = api.getImg().enqueue(object : Callback<ResponseBody> {
-                    // in case of success
-                    override fun onResponse(
-                        call: Call<ResponseBody>, response: Response<ResponseBody>
-                    ) {
-                        val bytes = response?.body()?.bytes()
-                        val bitmap =
-                            bytes?.size?.let { BitmapFactory.decodeByteArray(bytes, 0, it) }
-                        if (bitmap != null) {
-                            img.setImageBitmap(bitmap)
-                        }
+        val body = api.getImg().enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    val inputStream = response?.body()?.byteStream()
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+                    runOnUiThread {
+                        val imageView = findViewById<ImageView>(R.id.img)
+                        imageView.setImageBitmap(bitmap)
                     }
+                } else {
+                    val valuesToast = Toast.makeText(
+                        applicationContext,
+                        "Failed to load new screen", Toast.LENGTH_SHORT
+                    )
+                    valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                    valuesToast.show()
+                }
+            }
 
-                    // in case of failure
-                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                        if (!messageShouldStop) {
-                            val screenShotToast = Toast.makeText(
-                                applicationContext,
-                                "Failed to get screen shot", Toast.LENGTH_SHORT
-                            )
-                            screenShotToast.setGravity(
-                                Gravity.TOP or Gravity.CENTER_HORIZONTAL,
-                                350,
-                                20
-                            )
-                            screenShotToast.show()
-                        }
-                    }
-                })
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                val valuesToast = Toast.makeText(
+                    applicationContext,
+                    "Failed to load new screen", Toast.LENGTH_SHORT
+                )
+                valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                valuesToast.show()
+            }
+        })
+    }
+
+    private val handler = CoroutineExceptionHandler { _, exception ->
+        Log.v("Network", "Caught $exception")
+    }
+
+    private fun getScreenShotLoop() {
+        isScreenShotChanged = true
+        CoroutineScope(IO).launch(handler) {
+            while (isScreenShotChanged) {
+                delay(300)
+                getScreenShot()
             }
         }
     }
@@ -147,7 +159,7 @@ class AppActivity : AppCompatActivity() {
                         applicationContext,
                         "Failed to set values", Toast.LENGTH_SHORT
                     )
-                    valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                    valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 430, 20)
                     valuesToast.show()
                 }
             }
@@ -157,7 +169,7 @@ class AppActivity : AppCompatActivity() {
                     applicationContext,
                     "Failed to set values", Toast.LENGTH_SHORT
                 )
-                valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 430, 20)
                 valuesToast.show()
             }
         })
@@ -168,9 +180,6 @@ class AppActivity : AppCompatActivity() {
         // move to the main window
         val intent = Intent(this, MainActivity::class.java).apply { }
         startActivity(intent)
-
-        // the message should stop
-        messageShouldStop = true
 
         // shut down the window
         onStop()
