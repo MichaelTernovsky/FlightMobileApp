@@ -3,7 +3,6 @@ package com.example.flightmobileapp
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -11,6 +10,7 @@ import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
 import io.github.controlwear.virtual.joystick.android.JoystickView
 import kotlinx.android.synthetic.main.activity_app.*
@@ -28,7 +28,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import kotlin.math.roundToInt
-import kotlin.system.exitProcess
 
 class AppActivity : AppCompatActivity() {
     // the data base
@@ -160,7 +159,6 @@ class AppActivity : AppCompatActivity() {
         })
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun logOut(view: View) {
         // move to the main window
@@ -175,7 +173,6 @@ class AppActivity : AppCompatActivity() {
     }
 
     private fun moreThanOnePercent(changedVal: Double, originalVal: Double): Boolean {
-        /*
         return if (originalVal == 0.0 && changedVal != 0.0)
             true
         else {
@@ -183,15 +180,6 @@ class AppActivity : AppCompatActivity() {
                 kotlin.math.abs(kotlin.math.abs(changedVal) - kotlin.math.abs(originalVal))
             return absValue >= 0.01 * kotlin.math.abs(originalVal)
         }
-
-         */
-
-        if ((changedVal > originalVal) && (changedVal - originalVal) >= 0.01) {
-            return true
-        } else if ((changedVal < originalVal) && (originalVal - changedVal) >= 0.01) {
-            return true
-        }
-        return false
     }
 
     private fun setJoystickListeners() {
@@ -209,11 +197,11 @@ class AppActivity : AppCompatActivity() {
             this.aileronText.text = newAileron
             this.elevatorText.text = newElevator
 
-            aileron = roundedX
-            elevator = roundedY
-
             // check if the values change in more than 1%
             if (moreThanOnePercent(roundedX, aileron) || moreThanOnePercent(roundedY, elevator)) {
+                aileron = roundedX
+                elevator = roundedY
+
                 // turning on the set commands function
                 setValuesCommand()
             }
