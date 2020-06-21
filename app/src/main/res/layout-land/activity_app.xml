@@ -11,7 +11,7 @@
         android:id="@+id/joystick"
         android:layout_width="250dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="52dp"
         app:JV_backgroundColor="#009688"
         app:JV_borderColor="#00796B"
         app:JV_borderWidth="4dp"
@@ -20,7 +20,7 @@
         app:JV_fixedCenter="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.162"
         app:layout_constraintStart_toStartOf="parent" />
 
     <SeekBar
@@ -37,17 +37,17 @@
 
     <SeekBar
         android:id="@+id/throttleSlider"
-        android:layout_width="229dp"
-        android:layout_height="126dp"
+        android:layout_width="210dp"
+        android:layout_height="122dp"
         android:max="10"
         android:min="0"
         android:rotation="270"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/joystick"
-        app:layout_constraintHorizontal_bias="0.422"
+        app:layout_constraintHorizontal_bias="0.34"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/joystick"
-        app:layout_constraintVertical_bias="0.416" />
+        app:layout_constraintVertical_bias="0.405" />
 
     <TextView
         android:id="@+id/throttleText"
@@ -57,10 +57,10 @@
         android:text="@string/throttle_0_0"
         app:layout_constraintBottom_toBottomOf="@+id/throttleSlider"
         app:layout_constraintEnd_toStartOf="@+id/joystick"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/joystick"
-        app:layout_constraintVertical_bias="0.621" />
+        app:layout_constraintVertical_bias="0.733" />
 
     <TextView
         android:id="@+id/rudderText"
@@ -81,10 +81,10 @@
         android:text="@string/aileron_0_0"
         app:layout_constraintBottom_toTopOf="@+id/rudderText"
         app:layout_constraintEnd_toEndOf="@+id/joystick"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="@+id/joystick"
-        app:layout_constraintTop_toTopOf="@+id/img"
-        app:layout_constraintVertical_bias="0.548" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.11" />
 
     <TextView
         android:id="@+id/elevatorText"
@@ -94,10 +94,10 @@
         android:text="@string/elevator_0_0"
         app:layout_constraintBottom_toBottomOf="@+id/joystick"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.934"
+        app:layout_constraintHorizontal_bias="0.358"
         app:layout_constraintStart_toStartOf="@+id/joystick"
         app:layout_constraintTop_toTopOf="@+id/joystick"
-        app:layout_constraintVertical_bias="0.583" />
+        app:layout_constraintVertical_bias="0.555" />
 
     <ImageView
         android:id="@+id/img"
@@ -106,10 +106,10 @@
         android:contentDescription="@string/screenshot"
         app:layout_constraintBottom_toBottomOf="@+id/rudderSlider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.686"
+        app:layout_constraintHorizontal_bias="0.991"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.085"
+        app:layout_constraintVertical_bias="0.736"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button

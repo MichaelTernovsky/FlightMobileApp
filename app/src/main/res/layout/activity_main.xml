@@ -19,15 +19,16 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
-        android:id="@+id/urlTxt"
+        android:id="@id/urlTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginLeft="28dp"
         android:layout_marginBottom="48dp"
+        android:autofillHints=""
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Type URL"
+        android:hint="@string/type_url"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -38,6 +39,6 @@
         android:gravity="center"
         android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"/>
+        android:paddingRight="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

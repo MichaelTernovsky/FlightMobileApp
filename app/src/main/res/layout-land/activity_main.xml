@@ -26,8 +26,7 @@
         android:layout_marginLeft="28dp"
         android:layout_marginBottom="48dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Type URL"
+        android:hint="@string/type_url"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -38,6 +37,8 @@
         android:gravity="center"
         android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"/>
+        android:paddingRight="16dp"
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

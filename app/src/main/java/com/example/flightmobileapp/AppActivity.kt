@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
@@ -27,6 +28,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import kotlin.math.roundToInt
+import kotlin.system.exitProcess
 
 class AppActivity : AppCompatActivity() {
     // the data base
@@ -62,6 +64,9 @@ class AppActivity : AppCompatActivity() {
 
         // turning on the screen shot function
         getScreenShot()
+
+        // reset the assisting variable
+        messageShouldStop = false
     }
 
     override fun onStart() {
@@ -69,6 +74,11 @@ class AppActivity : AppCompatActivity() {
 
         // reset the assisting variable
         messageShouldStop = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        messageShouldStop = true
     }
 
     private fun getScreenShot() {
@@ -101,10 +111,12 @@ class AppActivity : AppCompatActivity() {
                     // in case of failure
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                         if (!messageShouldStop) {
-                            Toast.makeText(
+                            val toast = Toast.makeText(
                                 applicationContext,
                                 "Failed to get screen shot", Toast.LENGTH_SHORT
-                            ).show()
+                            )
+                            toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                            toast.show()
                         }
                     }
                 })
@@ -129,10 +141,12 @@ class AppActivity : AppCompatActivity() {
                     println("make the update correctly")
                 } catch (e: IOException) {
                     if (!messageShouldStop) {
-                        Toast.makeText(
+                        val toast = Toast.makeText(
                             applicationContext,
                             "Failed to set values", Toast.LENGTH_SHORT
-                        ).show()
+                        )
+                        toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                        toast.show()
                     }
                 }
             }
@@ -155,6 +169,9 @@ class AppActivity : AppCompatActivity() {
 
         // the message should stop
         messageShouldStop = true
+
+        // shut down the window
+        onStop()
     }
 
     private fun moreThanOnePercent(changedVal: Double, originalVal: Double): Boolean {

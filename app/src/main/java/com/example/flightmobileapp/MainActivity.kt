@@ -1,26 +1,19 @@
 package com.example.flightmobileapp
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginBottom
-import androidx.core.view.marginEnd
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.activity_app.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -143,10 +136,12 @@ class MainActivity : AppCompatActivity() {
             // in case of failure
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 // failure - show correct message
-                Toast.makeText(
+                val toast = Toast.makeText(
                     applicationContext,
-                    "Failed to connect to the server", Toast.LENGTH_SHORT
-                ).show()
+                    "Failed to connect the server", Toast.LENGTH_SHORT
+                )
+                toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 200)
+                toast.show()
             }
         })
     }
@@ -174,10 +169,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             // delete the buttons
-            //deleteButtons()
+            deleteButtons()
 
             // show the buttons again
-            //showButtons()
+            showButtons()
 
             // check if we can connect to the server
             tryToConnect(url)
