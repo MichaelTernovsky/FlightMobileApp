@@ -143,7 +143,7 @@ class AppActivity : AppCompatActivity() {
                 } else {
                     val valuesToast = Toast.makeText(
                         applicationContext,
-                        "Failed to load new screen", Toast.LENGTH_SHORT
+                        "Failed to load screen shot", Toast.LENGTH_SHORT
                     )
                     valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
                     valuesToast.show()
@@ -153,7 +153,7 @@ class AppActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 val valuesToast = Toast.makeText(
                     applicationContext,
-                    "Failed to load new screen", Toast.LENGTH_SHORT
+                    "Failed to load screen shot", Toast.LENGTH_SHORT
                 )
                 valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
                 valuesToast.show()
@@ -161,16 +161,12 @@ class AppActivity : AppCompatActivity() {
         })
     }
 
-    private val handler = CoroutineExceptionHandler { _, exception ->
-        Log.v("Network", "Caught $exception")
-    }
-
     private fun getScreenShotLoop() {
         isScreenShotChanged = true
-        CoroutineScope(IO).launch(handler) {
+        CoroutineScope(IO).launch() {
             while (isScreenShotChanged) {
-                delay(300)
                 getScreenShot()
+                delay(2000)
             }
         }
     }
