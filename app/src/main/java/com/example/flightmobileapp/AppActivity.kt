@@ -166,7 +166,7 @@ class AppActivity : AppCompatActivity() {
         CoroutineScope(IO).launch() {
             while (isScreenShotChanged) {
                 getScreenShot()
-                delay(2000)
+                delay(500)
             }
         }
     }
@@ -270,7 +270,9 @@ class AppActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java).apply { }
         startActivity(intent)
 
-        // shut down the window
-        onStop()
+        isScreenShotChanged = false
+
+        // finish the current window
+        this.finish()
     }
 }
