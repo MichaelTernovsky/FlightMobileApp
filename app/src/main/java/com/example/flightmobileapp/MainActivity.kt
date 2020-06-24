@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                 // turn on the flag
                 isFound = 1
             }
-            index++;
+            index++
         }
 
         // delete the url from the list if it exists
@@ -127,7 +127,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /*
-      The function tries to send "get screen shot" command in order to know if we are connected
+      The function tries to send "get screen shot" command in order to
+      know if we are connected
       */
     private fun tryToConnect(urlPath: String) {
         val json = GsonBuilder()
@@ -155,7 +156,10 @@ class MainActivity : AppCompatActivity() {
                     applicationContext,
                     "Failed to connect the server", Toast.LENGTH_SHORT
                 )
-                toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 200)
+                toast.setGravity(
+                    Gravity.TOP or Gravity.CENTER_HORIZONTAL,
+                    0, 200
+                )
                 toast.show()
             }
         })

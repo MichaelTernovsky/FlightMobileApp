@@ -92,7 +92,8 @@ class AppActivity : AppCompatActivity() {
      */
     private fun setValuesCommand() {
         val json =
-            "{\"aileron\": $aileron,\n \"rudder\": $rudder,\n \"elevator\": $elevator,\n \"throttle\": $throttle\n}"
+            "{\"aileron\": $aileron,\n \"rudder\": $rudder,\n \"elevator\": " +
+                    "$elevator,\n \"throttle\": $throttle\n}"
         val rb = RequestBody.create(MediaType.parse("application/json"), json)
         val gson = GsonBuilder().setLenient().create()
         val retrofit = Retrofit.Builder()
@@ -101,7 +102,10 @@ class AppActivity : AppCompatActivity() {
             .build()
         val api = retrofit.create(Api::class.java)
         val body = api.postCommand(rb).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            override fun onResponse(
+                call: Call<ResponseBody>, response:
+                Response<ResponseBody>
+            ) {
                 try {
                     // try to send the message
                     Log.d("FlightMobileApp", response.body().toString())
@@ -110,7 +114,10 @@ class AppActivity : AppCompatActivity() {
                         applicationContext,
                         "Failed to set values", Toast.LENGTH_SHORT
                     )
-                    valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 430, 20)
+                    valuesToast.setGravity(
+                        Gravity.TOP or Gravity.CENTER_HORIZONTAL,
+                        430, 20
+                    )
                     valuesToast.show()
                 }
             }
@@ -120,7 +127,10 @@ class AppActivity : AppCompatActivity() {
                     applicationContext,
                     "Failed to set values", Toast.LENGTH_SHORT
                 )
-                valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 430, 20)
+                valuesToast.setGravity(
+                    Gravity.TOP or Gravity.CENTER_HORIZONTAL,
+                    430, 20
+                )
                 valuesToast.show()
             }
         })
@@ -138,9 +148,12 @@ class AppActivity : AppCompatActivity() {
         val api = retrofit.create(Api::class.java)
 
         val body = api.getImg().enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            override fun onResponse(
+                call: Call<ResponseBody>, response:
+                Response<ResponseBody>
+            ) {
                 if (response.isSuccessful) {
-                    val inputStream = response?.body()?.byteStream()
+                    val inputStream = response.body()?.byteStream()
                     val bitmap = BitmapFactory.decodeStream(inputStream)
                     runOnUiThread {
                         val imageView = findViewById<ImageView>(R.id.img)
@@ -151,7 +164,10 @@ class AppActivity : AppCompatActivity() {
                         applicationContext,
                         "Failed to load screen shot", Toast.LENGTH_SHORT
                     )
-                    valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                    valuesToast.setGravity(
+                        Gravity.TOP or Gravity.CENTER_HORIZONTAL,
+                        350, 20
+                    )
                     valuesToast.show()
                 }
             }
@@ -161,7 +177,10 @@ class AppActivity : AppCompatActivity() {
                     applicationContext,
                     "Failed to load screen shot", Toast.LENGTH_SHORT
                 )
-                valuesToast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 350, 20)
+                valuesToast.setGravity(
+                    Gravity.TOP or Gravity.CENTER_HORIZONTAL,
+                    350, 20
+                )
                 valuesToast.show()
             }
         })
@@ -221,7 +240,7 @@ class AppActivity : AppCompatActivity() {
                 elevator = roundedY
 
                 // turning on the set commands function
-                CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(IO).launch {
                     setValuesCommand()
                 }
             }
@@ -274,7 +293,7 @@ class AppActivity : AppCompatActivity() {
                 // check if the values changed in more than 1%
                 if (moreThanOnePercent(value, aileron)) {
                     // turning on the set commands function
-                    CoroutineScope(Dispatchers.IO).launch {
+                    CoroutineScope(IO).launch {
                         setValuesCommand()
                     }
                 }
