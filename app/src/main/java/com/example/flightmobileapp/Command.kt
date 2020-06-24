@@ -1,8 +1,6 @@
 package com.example.flightmobileapp
 
 import androidx.annotation.NonNull
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 
 data class Command(
     @NonNull
