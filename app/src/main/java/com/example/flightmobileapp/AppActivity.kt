@@ -87,6 +87,9 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    The function is responsible for sending values to the simulator
+     */
     private fun setValuesCommand() {
         val json =
             "{\"aileron\": $aileron,\n \"rudder\": $rudder,\n \"elevator\": $elevator,\n \"throttle\": $throttle\n}"
@@ -123,6 +126,9 @@ class AppActivity : AppCompatActivity() {
         })
     }
 
+    /*
+     The function is responsible for getting a single screen shot from the simulator
+     */
     private fun getScreenShot() {
         val json = GsonBuilder().setLenient().create()
 
@@ -161,6 +167,9 @@ class AppActivity : AppCompatActivity() {
         })
     }
 
+    /*
+     The function is responsible for the while loop in which we take a screen shot every 500 millis
+     */
     private fun getScreenShotLoop() {
         isScreenShotChanged = true
         CoroutineScope(IO).launch() {
@@ -171,6 +180,9 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
+    /*
+     The function is checking if the value is changed by more than 1 percent
+     */
     private fun moreThanOnePercent(changedVal: Double, originalVal: Double): Boolean {
         return if (originalVal == 0.0 && changedVal != 0.0)
             true
@@ -181,6 +193,9 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
+    /*
+     The function is setting the methods that would happen if the joystick value is changed
+     */
     private fun setJoystickListeners() {
         joystick.setOnMoveListener(JoystickView.OnMoveListener() { angle: Int, strength: Int ->
             // calculate the value from the joystick
@@ -213,6 +228,9 @@ class AppActivity : AppCompatActivity() {
         })
     }
 
+    /*
+     The function is setting the methods that would happen if the rudder slider value is changed
+     */
     private fun setRudderSliderListeners() {
         // turning on the on move function of the sliders
         rudderSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -239,6 +257,9 @@ class AppActivity : AppCompatActivity() {
         })
     }
 
+    /*
+     The function is setting the methods that would happen if the throttle slider value is changed
+     */
     private fun setThrottleSliderListeners() {
         throttleSlider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -264,15 +285,16 @@ class AppActivity : AppCompatActivity() {
         })
     }
 
+    /*
+     The function moves us to the main page and stops the while loop of the screen shots
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun logOut(view: View) {
         // move to the main window
         val intent = Intent(this, MainActivity::class.java).apply { }
         startActivity(intent)
 
+        // stop the boolean predicate of the while loop
         isScreenShotChanged = false
-
-        // finish the current window
-        this.finish()
     }
 }

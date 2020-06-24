@@ -42,6 +42,9 @@ class MainActivity : AppCompatActivity() {
         showButtons()
     }
 
+    /*
+     The function creates a button to each url from the list of urls
+     */
     private fun showButtons() {
         // get the urls from the db
         urlsList = db.getAllUrls()
@@ -70,6 +73,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /*
+      The function deletes the urls buttons from the list and from the layout
+      */
     private fun deleteButtons() {
         if (buttonsList.isNotEmpty()) {
             // the current layout
@@ -85,6 +91,9 @@ class MainActivity : AppCompatActivity() {
         buttonsList.clear()
     }
 
+    /*
+      The function deletes url from the list if it exists
+      */
     private fun deleteIfExistInList(urlToFind: Url) {
         var index = 0
         var urlIndex = 0
@@ -108,12 +117,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /*
+      The function moves to the second page if the user connected
+      */
     private fun moveToSecondWindow() {
         // success - move to the next window
         val intent = Intent(this, AppActivity::class.java).apply { }
         startActivity(intent)
     }
 
+    /*
+      The function tries to send "get screen shot" command in order to know if we are connected
+      */
     private fun tryToConnect(urlPath: String) {
         val json = GsonBuilder()
             .setLenient()
@@ -146,6 +161,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /*
+      The function is adding a new url if the user press the connect button
+      */
     @RequiresApi(Build.VERSION_CODES.O)
     fun addNewUrl(view: View) {
         val url = this.urlTxt.text.toString()
