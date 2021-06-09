@@ -4,7 +4,7 @@ The application communicates with Flight-Gear simulator by transmitting data and
 The current project is the client side of the application, written in kotlin.
 
 # Running
-Run the client side along side with server side, found in "FlightMobileServer" repo.
+Run the client side along side with server side, found in "FlightMobileServer" repository.
 
 # Versions
 Using Github for version control.
