@@ -9,8 +9,8 @@ Run the client side along side with server side, found in "FlightMobileServer" r
 Using Github for version control.
 
 # IDE
-Android Studio - Ide by JetBrains
+Android Studio - Ide by JetBrains.
 
 # Authors
-Michael Ternovsky
-Ofir Ben Ezra
+- Michael Ternovsky.
+- Ofir Ben Ezra.
