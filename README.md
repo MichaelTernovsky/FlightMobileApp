@@ -1,5 +1,5 @@
 # FlightMobileApp
-The application communicates with Flight-Gear simulator by transmitting data and request asynchronously.
+The application communicates with Flight-Gear simulator by transmitting data and requests asynchronously.
 The current project is the client side of the application, written in kotlin.
 
 # Running
